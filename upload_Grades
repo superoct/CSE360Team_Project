@@ -1,0 +1,106 @@
+package GUI.project;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.*;  
+import javafx.stage.FileChooser;
+import javafx.stage.Screen;
+import javafx.geometry.Rectangle2D;
+import java.awt.Component;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import javax.swing.JLabel;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+public class GradeAnalyzer extends Application {
+	private HBox hBox;
+	private Button yesButton,noButton;
+	private BorderPane bp, bp2;
+	
+    @Override
+        public void start(Stage stage) throws Exception {
+    	
+    	GradeError_window error = new GradeError_window();
+    	
+        hBox = new HBox();
+        hBox.setTranslateX(40);
+        hBox.setTranslateY(10);
+       
+        bp  = new BorderPane();
+        bp2 = new BorderPane();
+   
+        yesButton = new Button("yes");
+        noButton = new Button("no");
+        
+        yesButton.setMinWidth(50); //set width of the buttons
+        noButton.setMinWidth(50);
+        noButton.setTranslateX(20);
+               
+        yesButton.setOnAction((e)->
+        {
+        	FileChooser chooseFile = new FileChooser();
+        	chooseFile.setTitle("Slecet .txt file");
+        	FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        	chooseFile.getExtensionFilters().add(extFilter);
+        	File file = chooseFile.showOpenDialog(stage);
+        	List<Float> list = new ArrayList<Float>();
+        	try {
+				Scanner scan = new Scanner(file);
+				while(scan.hasNext() && scan.hasNextFloat())
+				{
+					list.add(Float.parseFloat(scan.next()));
+				}
+				
+				if(list.isEmpty()) { //This will open a new window if the file selected doesn't contain numbers
+					try {
+						error.start(stage);
+
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}					
+				}
+				
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			}
+        	
+        	for(int i = 0; i < list.size(); i++) {
+        		System.out.println(list.get(i));
+        	}
+        });
+        
+        Label label = new Label("Would you like to load a file?");
+        
+        hBox.getChildren().addAll(yesButton,noButton);
+             
+        bp2.setCenter(label);
+        bp.setTop(bp2);
+        bp.setCenter(hBox);
+      
+        stage.setTitle("Grade Analyser");
+        Scene scene = new Scene(bp);
+        stage.setScene(scene);
+        stage.setWidth(200);
+        stage.setHeight(90);
+        stage.show();
+        
+        stage.setMinWidth(stage.getWidth());
+        stage.setMinHeight(stage.getHeight());
+    }
+  
+    public static void main(String[] args) {
+        Application.launch(args);
+    }
+}
