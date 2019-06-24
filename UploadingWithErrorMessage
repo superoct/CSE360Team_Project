@@ -1,0 +1,46 @@
+package GUI.project;
+
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
+
+public class GradeError_window extends Application{
+
+	public void start(Stage stage) throws Exception {
+		
+		GradeAnalyzer ga = new GradeAnalyzer();
+		
+		Label errorLabel = new Label("The file you selected doesn't have floating point values");
+		errorLabel.setTranslateX(20);
+		errorLabel.setTranslateY(25);
+		
+		Button back = new Button("back");
+		back.setMinWidth(50);
+		back.setTranslateX(45);
+		back.setTranslateY(20);
+
+		HBox hBox = new HBox();
+		
+		back.setOnAction(e->{
+			try {
+				ga.start(stage);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
+		
+		hBox.getChildren().addAll(errorLabel,back);
+		
+        stage.setTitle("ERROR");
+        stage.setWidth(470);
+        stage.setHeight(90);
+        Scene scene = new Scene(hBox, 300, 70);
+    	stage.setScene(scene);
+        stage.show();
+	}
+
+}
